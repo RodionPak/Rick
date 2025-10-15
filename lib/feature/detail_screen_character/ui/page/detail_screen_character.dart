@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../bloc/detail_character_bloc.dart';
+import '../widget/TitleDescriptionWidget.dart';
+import '../widget/custom_expansion_tile.dart';
 
 class DetailScreenCharacter extends StatefulWidget {
   const DetailScreenCharacter({super.key});
@@ -25,9 +27,11 @@ class _DetailScreenCharacterState extends State<DetailScreenCharacter> {
               onPressed: () => Navigator.pop(context),
             ),
             centerTitle: true,
-            title: const Text(
-              'All Characters',
-              style: TextStyle(
+            title:Text(
+              state is SuccessGetDetailCharacterState
+                  ? state.model.name // Показываем имя персонажа
+                  : 'Loading...', // Пока данные загружаются
+              style: const TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
@@ -65,11 +69,23 @@ class _DetailScreenCharacterState extends State<DetailScreenCharacter> {
                   TitleDescriptionWidget(title: 'status:', subtitle:  state.model.status.name),
                   TitleDescriptionWidget(title: 'Location:', subtitle: state.model.location.name),
                   TitleDescriptionWidget(title: 'Created:', subtitle:DateFormat('dd MMM yyyy, HH:mm').format(state.model.created)),
-                  TitleDescriptionWidgetMore(
+                  CustomExpansionTile(
                     title: 'Episodes:',
-                    subtitle: state.model.episode.take(10).join('\n'),
+                    itemCount: state.model.episode.length, // можно показать сколько эпизодов
+                    children: state.model.episode.map((episodeUrl) {
+                      return ListTile(
+                        title: Text(
+                          episodeUrl,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                        onTap: () {
+                          // 👇 здесь можно добавить навигацию к экрану эпизода
+                          print('Tapped on episode: $episodeUrl');
+                        },
+                      );
+                    }).toList(),
                   ),
-
+                  TitleDescriptionWidget(title: 'Location:', subtitle: state.model.location.name),
 
 
                 ],
@@ -88,80 +104,6 @@ class _DetailScreenCharacterState extends State<DetailScreenCharacter> {
   }
 }
 
-class TitleDescriptionWidget extends StatelessWidget {
-  final String title;
-  final String subtitle;
-
-  const TitleDescriptionWidget({
-    super.key,
-    required this.title,
-    required this.subtitle,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30.0),
-      child: Row(
-
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          ),
-          Flexible(
-            child: FittedBox(
-              child: Text(
-                maxLines: 1,
-                subtitle,
-                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class TitleDescriptionWidgetMore extends StatelessWidget {
-  final String title;
-  final String subtitle;
-
-  const TitleDescriptionWidgetMore({
-    super.key,
-    required this.title,
-    required this.subtitle,
-  });
 
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal:30),
-      child: Row(
 
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          ),Flexible(
-            child: FittedBox(
-              child: SingleChildScrollView(
-                child: Container(
-                  child: Text(
-                    maxLines: 10,
-                        subtitle,
-                        style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
-                      ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

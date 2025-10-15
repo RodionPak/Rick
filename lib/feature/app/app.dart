@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:ricki/feature/app/routing/routing.dart';
 
+import '../../Core/Internal/si.dart';
 import '../detail_screen_character/ui/bloc/detail_character_bloc.dart';
 import '../home_page/ui/state/home_page_bloc.dart' show HomePageBloc;
 
@@ -18,10 +20,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider<HomePageBloc>(create: (context) => HomePageBloc()),
-        BlocProvider<DetailCharacterBloc>(create: (context) => DetailCharacterBloc()),
-      ],
+      providers:buildListProviders(locator: getIt),
       child: MaterialApp.router(
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -31,4 +30,15 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
+}
+
+List<BlocProvider> buildListProviders({required GetIt locator}) {
+  return <BlocProvider>[
+    BlocProvider<HomePageBloc>(
+      create: (context) => locator<HomePageBloc>(),
+    ),
+    BlocProvider<DetailCharacterBloc>(
+      create: (context) => locator<DetailCharacterBloc>(),
+    ),
+  ];
 }

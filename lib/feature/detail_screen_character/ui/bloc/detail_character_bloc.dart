@@ -1,14 +1,21 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:injectable/injectable.dart';
 import 'package:dio/dio.dart';
 import 'package:ricki/feature/home_page/ui/models/character_models.dart';
+
+import '../../data/api/service/detail_screen_character_service_api.dart';
 
 part 'detail_character_event.dart';
 
 part 'detail_character_state.dart';
 
-class DetailCharacterBloc extends Bloc<DetailCharacterEvent,DetailCharacterState> {
-  DetailCharacterBloc() : super(DetailCharacterInitial()) {
+
+@lazySingleton
+class DetailCharacterBloc extends Bloc<DetailCharacterEvent, DetailCharacterState> {
+  final DetailCharacterServiceApi _service;
+
+  DetailCharacterBloc(this._service) : super(DetailCharacterInitial()) {
     on<GetSingleCharacterEvent>(_getSingleCharacter);
   }
 
@@ -16,12 +23,9 @@ class DetailCharacterBloc extends Bloc<DetailCharacterEvent,DetailCharacterState
       GetSingleCharacterEvent event,
       Emitter<DetailCharacterState> emit,
       ) async {
-    final dio = Dio();
     emit(DetailCharacterLoadState());
-    final response = await dio.get('https://rickandmortyapi.com/api/character/${event.id}');
-
-    Character model = Character.fromJson(response.data);
-
+    final model = await _service.getCharacter(event.id);
     emit(SuccessGetDetailCharacterState(model: model));
   }
 }
+

@@ -23,6 +23,21 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xF0FFFFFF),
+      appBar: AppBar(
+        backgroundColor: Colors.white, // фиксированный цвет
+        elevation: 4,
+        toolbarHeight: 40,
+        centerTitle: true,
+        title: const Text(
+          'All Characters',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+            letterSpacing: 0.5,
+          ),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: BlocBuilder<HomePageBloc, HomePageState>(
