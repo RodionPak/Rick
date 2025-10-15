@@ -6,6 +6,10 @@ sealed class HomePageState {
 }
 
 final class HomePageInitial extends HomePageState {}
+final class ErrorGetCharacterState extends HomePageState {
+
+
+}
 
 final class SuccessGetCharacterState extends HomePageState {
   final CharactersModel model;
