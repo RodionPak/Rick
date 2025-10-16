@@ -23,9 +23,18 @@ class DetailCharacterBloc extends Bloc<DetailCharacterEvent, DetailCharacterStat
       GetSingleCharacterEvent event,
       Emitter<DetailCharacterState> emit,
       ) async {
-    emit(DetailCharacterLoadState());
-    final model = await _service.getCharacter(event.id);
-    emit(SuccessGetDetailCharacterState(model: model));
+    try {
+      emit(DetailCharacterLoadState());
+      final model = await _service.getCharacter(event.id);
+
+      if (model != null) {
+        emit(SuccessGetDetailCharacterState(model: model));
+      } else {
+        emit(ErrorGetCharacterState());
+      }
+    } catch (e) {
+      emit(ErrorGetCharacterState());
+    }
   }
 }
 

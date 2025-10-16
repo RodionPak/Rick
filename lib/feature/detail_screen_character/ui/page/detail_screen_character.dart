@@ -29,8 +29,8 @@ class _DetailScreenCharacterState extends State<DetailScreenCharacter> {
             centerTitle: true,
             title:Text(
               state is SuccessGetDetailCharacterState
-                  ? state.model.name // Показываем имя персонажа
-                  : 'Loading...', // Пока данные загружаются
+                  ? state.model.name
+                  : 'Loading...',
               style: const TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,

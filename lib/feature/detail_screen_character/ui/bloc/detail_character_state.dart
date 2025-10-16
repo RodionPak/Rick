@@ -7,7 +7,10 @@ sealed class DetailCharacterState {
 
 final class DetailCharacterInitial extends DetailCharacterState {}
 final class DetailCharacterLoadState extends DetailCharacterState {}
+final class ErrorGetCharacterState extends DetailCharacterState {
 
+
+}
 
 final class SuccessGetDetailCharacterState extends DetailCharacterState {
   final Character model;
