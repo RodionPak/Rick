@@ -12,8 +12,18 @@ class DetailCharacterServiceApi extends DetailScreenCharacterApi {
 
 
 @override
-  Future<Character> getCharacter(int id) async {
+  Future<Character?> getCharacter(int id) async {
+  try{
+
     final response = await _dio.get('character/$id');
     return Character.fromJson(response.data);
+
+  }
+catch(error) {
+    print("Error detail screen ${error}");
+
+return null;
+
+  }
   }
 }
